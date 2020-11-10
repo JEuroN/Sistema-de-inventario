@@ -1,21 +1,21 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
-import PopUp from './modelPers'
+import PopInv from './modelInv'
 
-const Personal = () => {
+const Inventario = () => {
 
     const {isAdmin} = useContext(AuthContext);
 
-    const [Worker, setWorker] = useState([
-    {worker_id: 1, worker_name: 'Obteniendo Datos', worker_login:'xxxx-xx-x', worker_number: 'xx', worker_ced: 'xx', worker_charge: "No-asignado"},
-    ])
-
-    const [filter, setFilter] = useState('');
-
     const [visible, setVisible] = useState(false);
 
+    const [product, setProduct] = useState([
+        {product_id: 'x', product_precio: 'Buscando productos', product_quant: 'espere', product_name: 'x', product_prov: 'x'}
+    ]);
+
     const [data, setData] = useState('');
+
+    const [filter, setFilter] = useState('');
 
     const [choice, setChoice] = useState('');
 
@@ -51,21 +51,21 @@ const Personal = () => {
     }
 
     useEffect(() => {
-        getWorkers();
+        getProducts();
     },[]);
 
-    const getWorkers = () => {
-        axios("http://localhost:3001/personal/get", {
+    const getProducts = () => {
+        axios("http://localhost:3001/inventario/get", {
             method: 'get',
             headers: {"Content-Type": "application/json"}
         })
         .then((res)=>{
             console.log(res);
             if(res.data.msg.length > 0)
-                setWorker(res.data.msg);
+                setProduct(res.data.msg);
             else
-                setWorker([
-                    {worker_id: 'x', worker_name: 'No se encuentran', worker_login: 'datos'}
+                setProduct([
+                    {product_id: 'x', product_name: 'No se encuentran', product_quant: 'datos'}
                 ])
         })
         .catch((err)=>{
@@ -75,35 +75,33 @@ const Personal = () => {
 
     const select = (id) =>{
         console.log(id);
-        let filter = Worker.filter(worker =>{
-            return worker.worker_id === id
+        let filter = product.filter(product =>{
+            return product.product_id === id
         })
         setData(filter[0]);
     }
 
-    const rows = Worker.map((worker, index) => {
-        const {worker_id, worker_name, worker_login, worker_num, worker_ced, worker_assing} = worker;
+    const rows = product.map((product, index) => {
+        const {product_id, product_name, product_quant, product_precio, product_prov} = product;
         return(
-            <tr key={worker_id} onClick={(e)=>{select(worker_id)}}>
-                <td>{worker_name}</td>
-                <td>{worker_login.split('T')[0]}</td>
-                <td>{worker_num}</td>
-                <td>{worker_ced}</td>
-                <td>{worker_assing}</td>
+            <tr key={product_id} onClick={(e)=>{select(product_id)}}>
+                <td>{product_name}</td>
+                <td>{product_quant}</td>
+                <td>{product_precio}</td>
+                <td>{product_prov}</td>
             </tr>
         )
     })
 
-    const search = Worker.map((worker, index) => {
-        const {worker_id, worker_name, worker_login, worker_num, worker_ced, worker_assing} = worker;
-        if(worker_name.toLowerCase().includes(filter.toLowerCase()) === true){
+    const search = product.map((product, index) => {
+        const {product_id, product_name, product_quant, product_precio, product_prov} = product;
+        if(product_name.toLowerCase().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={worker_id} onClick={(e)=>{select(worker_id)}}>
-                    <td>{worker_name}</td>
-                    <td>{worker_login.split('T')[0]}</td>
-                    <td>{worker_num}</td>
-                    <td>{worker_ced}</td>
-                    <td>{worker_assing}</td>
+                <tr key={product_id} onClick={(e)=>{select(product_id)}}>
+                    <td>{product_name}</td>
+                    <td>{product_quant}</td>
+                    <td>{product_precio}</td>
+                    <td>{product_prov}</td>
                 </tr>
             )
         }else
@@ -113,15 +111,14 @@ const Personal = () => {
     return ( 
         <div>
             <div>
-                <h2>PERSONAL</h2>
+                <h2>INVENTARIO</h2>
                 <table>
                     <tbody>
                         <tr>
                         <th>NOMBRE</th>
-                        <th>ULTIMA ACTIVIDAD</th>
-                        <th>NUMERO</th>
-                        <th>CEDULA</th>
-                        <th>PUESTO</th> 
+                        <th>CANTIDAD</th>
+                        <th>PRECIO</th>
+                        <th>PROVEEDOR</th>
                         </tr>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
@@ -140,9 +137,9 @@ const Personal = () => {
                         <button>Volver</button>               
                     )}
             </div>
-            {visible ? (<PopUp changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getWorkers}/>) : null}
+            {visible ? (<PopInv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProducts}/>) : null}
         </div>
      );
 }
  
-export default Personal;
+export default Inventario;

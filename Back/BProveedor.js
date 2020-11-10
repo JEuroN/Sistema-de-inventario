@@ -11,7 +11,7 @@ serv.use(express.static(__dirname + '/static'));
 const router = express.Router();
 
 router.get('/get', (req,res,next) => {
-    crud.select(crud.selectA('worker'))
+    crud.select(crud.selectA('provider'))
     .then((results)=>{
         res.send({msg:results, status: 200});
     })
@@ -22,13 +22,12 @@ router.get('/get', (req,res,next) => {
 });
 
 router.post('/crud', (req,res,next) =>{
-    let currentDate = new Date();
     const {choice, data} = req.body;
     console.log(choice, data);
     switch(choice){
         case 0:
             //Eliminar
-            crud.simple(crud.delete(data.id, 'worker_id', 'worker'))
+            crud.simple(crud.delete(data.id, 'provider_id', 'provider'))
             .then((r)=>{
                 res.send({msg: 'Exito eliminando!', status: 200});
             })
@@ -38,7 +37,7 @@ router.post('/crud', (req,res,next) =>{
             break;
         case 1:
             //Agregar
-            crud.simple(crud.add_worker(data.name,data.ced, currentDate.toLocaleDateString(), data.numero,data.puesto))
+            crud.simple(crud.add_provider(data.name, data.prod, data.dir, data.num))
             .then((r)=>{
                 res.send({msg: 'Exito eliminando!', status: 200});
             })
@@ -48,7 +47,7 @@ router.post('/crud', (req,res,next) =>{
             break;
         case 3:
             //Actualizar
-            crud.simple(crud.upd_worker(data.name, currentDate.toLocaleDateString(), data.numero, data.ced, data.puesto, data.id))
+            crud.simple(crud.upd_provider(data.id, data.name, data.prod, data.dir,data.num))
             .then((r)=>{
                 res.send({msg: 'Exito actualizando!', status: 200});
             })
@@ -61,6 +60,5 @@ router.post('/crud', (req,res,next) =>{
             break;
     }
 })
-
 
 module.exports = router;

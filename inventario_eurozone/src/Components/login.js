@@ -14,7 +14,6 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log(User, Pass);
         let body = {name: User, pass: Pass}
         axios("http://localhost:3001/login", {
             method: 'POST',

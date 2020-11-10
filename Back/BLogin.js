@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const crud = require('./crud');
+const crud = require('./queries');
 
 const serv = express();
 serv.use(cors());
@@ -12,11 +12,11 @@ const router = express.Router();
 
 router.post('/login', (req, res, next) => {
     let currentDate = new Date();
-    let string = `SELECT * FROM WORKER WHERE worker_name='${req.body.name}' AND worker_password='${req.body.pass}';`;
-    crud.select(string)
+    const {name, pass} = req.body
+    crud.select(crud.log_login(name, pass))
     .then((queryRes) => {
         if(queryRes!=false){
-            crud.simple(`UPDATE worker SET worker_login='${currentDate.toLocaleDateString()}' WHERE worker_name='${req.body.name}' AND worker_password='${req.body.pass}';`)
+            crud.simple(crud.upDate(currentDate.toLocaleDateString(), name, pass))
             .then((updateRes) => {
                 console.log("Updated!");
                 if(queryRes[0].ismanager == true){

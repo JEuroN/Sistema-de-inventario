@@ -1,19 +1,19 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
-import PopUp from './modelPers'
+import PopProv from './ModelProv'
 
-const Personal = () => {
+const Proveedor = () => {
 
     const {isAdmin} = useContext(AuthContext);
 
-    const [Worker, setWorker] = useState([
-    {worker_id: 1, worker_name: 'Obteniendo Datos', worker_login:'xxxx-xx-x', worker_number: 'xx', worker_ced: 'xx', worker_charge: "No-asignado"},
-    ])
+    const [visible, setVisible] = useState(false);
 
     const [filter, setFilter] = useState('');
 
-    const [visible, setVisible] = useState(false);
+    const [provider, setProvider] = useState([
+        {provider_id: 'x', provider_name: 'Buscando', provider_prod: 'datos', provider_dir: 'espere', provider_num: 'x'}
+    ]);
 
     const [data, setData] = useState('');
 
@@ -51,22 +51,22 @@ const Personal = () => {
     }
 
     useEffect(() => {
-        getWorkers();
+        getProviders();
     },[]);
 
-    const getWorkers = () => {
-        axios("http://localhost:3001/personal/get", {
+    const getProviders = () => {
+        axios("http://localhost:3001/providers/get", {
             method: 'get',
             headers: {"Content-Type": "application/json"}
         })
         .then((res)=>{
             console.log(res);
             if(res.data.msg.length > 0)
-                setWorker(res.data.msg);
+            setProvider(res.data.msg);
             else
-                setWorker([
-                    {worker_id: 'x', worker_name: 'No se encuentran', worker_login: 'datos'}
-                ])
+            setProvider([
+                {provider_id: 'x', provider_name: 'No se encuentran', provider_prod: 'datos'}
+            ])
         })
         .catch((err)=>{
             console.log(err);
@@ -75,35 +75,33 @@ const Personal = () => {
 
     const select = (id) =>{
         console.log(id);
-        let filter = Worker.filter(worker =>{
-            return worker.worker_id === id
+        let filter = provider.filter(provider =>{
+            return provider.provider_id === id
         })
         setData(filter[0]);
     }
 
-    const rows = Worker.map((worker, index) => {
-        const {worker_id, worker_name, worker_login, worker_num, worker_ced, worker_assing} = worker;
+    const rows = provider.map((provider, index) => {
+        const {provider_id, provider_name, provider_prod, provider_dir, provider_num} = provider;
         return(
-            <tr key={worker_id} onClick={(e)=>{select(worker_id)}}>
-                <td>{worker_name}</td>
-                <td>{worker_login.split('T')[0]}</td>
-                <td>{worker_num}</td>
-                <td>{worker_ced}</td>
-                <td>{worker_assing}</td>
+            <tr key={provider_id} onClick={(e)=>{select(provider_id)}}>
+                <td>{provider_name}</td>
+                <td>{provider_prod}</td>
+                <td>{provider_dir}</td>
+                <td>{provider_num}</td>
             </tr>
         )
     })
 
-    const search = Worker.map((worker, index) => {
-        const {worker_id, worker_name, worker_login, worker_num, worker_ced, worker_assing} = worker;
-        if(worker_name.toLowerCase().includes(filter.toLowerCase()) === true){
+    const search = provider.map((provider, index) => {
+        const {provider_id, provider_name, provider_prod, provider_dir, provider_num} = provider;
+        if(provider_name.toLowerCase().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={worker_id} onClick={(e)=>{select(worker_id)}}>
-                    <td>{worker_name}</td>
-                    <td>{worker_login.split('T')[0]}</td>
-                    <td>{worker_num}</td>
-                    <td>{worker_ced}</td>
-                    <td>{worker_assing}</td>
+                <tr key={provider_id} onClick={(e)=>{select(provider_id)}}>
+                    <td>{provider_name}</td>
+                    <td>{provider_prod}</td>
+                    <td>{provider_dir}</td>
+                    <td>{provider_num}</td>
                 </tr>
             )
         }else
@@ -113,15 +111,14 @@ const Personal = () => {
     return ( 
         <div>
             <div>
-                <h2>PERSONAL</h2>
+                <h2>PROVEEDORES</h2>
                 <table>
                     <tbody>
                         <tr>
                         <th>NOMBRE</th>
-                        <th>ULTIMA ACTIVIDAD</th>
+                        <th>PRODUCTO</th>
+                        <th>DIRECCION</th>
                         <th>NUMERO</th>
-                        <th>CEDULA</th>
-                        <th>PUESTO</th> 
                         </tr>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
@@ -140,9 +137,9 @@ const Personal = () => {
                         <button>Volver</button>               
                     )}
             </div>
-            {visible ? (<PopUp changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getWorkers}/>) : null}
+            {visible ? (<PopProv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProviders}/>) : null}
         </div>
      );
 }
  
-export default Personal;
+export default Proveedor;

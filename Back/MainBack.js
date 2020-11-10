@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const crud = require('./crud');
 const login = require('./BLogin');
 const personal = require('./BPersonal');
+const inventario = require('./BInventario');
+const proveedor = require('./BProveedor');
 
 const serv = express();
 serv.use(cors());
@@ -20,6 +21,9 @@ serv.use('/', login);
 
 serv.use('/personal/', personal);
 
+serv.use('/inventario', inventario);
+
+serv.use('/providers', proveedor);
 
 serv.listen(3001, () => {
     console.log('Conectado exitosamente!');
