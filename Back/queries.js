@@ -60,17 +60,29 @@ module.exports = {
     selectA: (table) => {
         return `SELECT * from ${table}`
     },
-    add_product: (quant, name, prod, precio) => {
-        return `INSERT INTO product(product_quant, product_name, product_prov, product_precio) VALUES (${quant}, '${name}', '${prod}', ${precio})`
+    add_product: (quant, name, prod, precio, codigo) => {
+        return `INSERT INTO product(product_quant, product_name, product_prov, product_precio, product_codigo) VALUES (${quant}, '${name}', '${prod}', ${precio}, ${codigo})`
     },
-    upd_product: (id, name, quant, prod, precio) => {
-        return `UPDATE product SET product_name='${name}', product_quant='${quant}', product_prov='${prod}', product_precio='${precio}' WHERE product_id=${id}`
+    upd_product: (id, name, quant, prod, precio, codigo) => {
+        return `UPDATE product SET product_name='${name}', product_quant='${quant}', product_prov='${prod}', product_precio='${precio}', product_codigo='${codigo}' WHERE product_id=${id}`
     },
     add_provider: (name, prod, dir, num) => {
         return `INSERT INTO provider(provider_name, provider_prod, provider_dir, provider_num) VALUES ('${name}', '${prod}', '${dir}', '${num}')`
     },
     upd_provider: (id, name, prod, dir, num) => {
         return `UPDATE provider SET provider_name='${name}', provider_prod='${prod}', provider_dir='${dir}', provider_num='${num}' WHERE provider_id=${id}`
+    },
+    select_prod: (data) => {
+        return `SELECT * FROM product WHERE product_name='${data}' OR product_codigo='${data}'`
+    },
+    add_client: (name, num, adrs, ced) => {
+        return `INSERT INTO cliente(client_name, client_address, client_number, client_ced) VALUES ('${name}','${adrs}','${num}','${ced}')`
+    },
+    upd_client: (id, name, num, adrs, ced) => {
+        return `UPDATE cliente SET client_name='${name}', client_address='${adrs}', client_number='${num}', client_ced='${ced}' WHERE client_id=${id}`
+    },
+    select_client: (name) => {
+        return `SELECT * FROM cliente WHERE client_name='${name}' OR client_ced='${name}'`
     }
 
 }

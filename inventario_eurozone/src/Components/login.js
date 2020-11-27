@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
 
@@ -8,9 +9,11 @@ const Login = () => {
     const [Pass, setPass] = useState('');
     const [Bool, setBool] = useState(true);
 
-    const {toggleAuth, toggleAdmin } = useContext(AuthContext);
+    const {toggleAuth, toggleAdmin, resetState } = useContext(AuthContext);
 
+    const history = useHistory();
 
+    useEffect(resetState, [])
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -26,10 +29,12 @@ const Login = () => {
                 case 0:
                     console.log('gei');
                     toggleAdmin(res.data.name);
+                    history.push('/home');
                 break;
                 case 1:
                     console.log('goi');
                     toggleAuth(res.data.name);
+                    history.push('/home');
                 break;
                 default:
                     console.log('boi');

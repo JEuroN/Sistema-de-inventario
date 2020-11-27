@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const PopInv = (props) => {
 
-    const {product_id, product_precio, product_quant, product_name, product_prov} = props.selected;
+    const {product_id, product_precio, product_quant, product_name, product_prov, product_codigo} = props.selected;
 
     const [name, setName] = useState(product_name);
 
@@ -29,9 +29,15 @@ const PopInv = (props) => {
         setProd(e)
     }
 
+    const [cod, setCod] = useState(product_codigo);
+
+    const handleCod = (e) => {
+        setCod(e);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        let data = {id: product_id, name: name, quant: quant, product_precio: precio, prod: prod};
+        let data = {id: product_id, name: name, quant: quant, product_precio: precio, prod: prod, cod: cod};
         console.log(data);
         let body = {choice: props.choice, data: data}
         console.log(body);
@@ -64,6 +70,8 @@ const PopInv = (props) => {
                         <input value={precio} onChange={(e)=>{handlePrecio(e.target.value)}} required></input>
                         <label>Proveedor</label>
                         <input value={prod} onChange={(e)=>{handleProd(e.target.value)}} required></input>
+                        <label>Codigo</label>
+                        <input value={cod} onChange={(e)=>{handleCod(e.target.value)}} required></input>
                         <input type='submit' value='Proceder' />
                     </form>
                     <button onClick={(e)=>{props.changeVis(2)}}>Volver</button>

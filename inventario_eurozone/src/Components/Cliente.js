@@ -1,16 +1,16 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
-import PopInv from './modelInv'
+import ModelCli from './ModelCli'
 
-const Inventario = () => {
+const Cliente = () => {
 
     const {isAdmin} = useContext(AuthContext);
 
     const [visible, setVisible] = useState(false);
 
-    const [product, setProduct] = useState([
-        {product_id: 'x', product_precio: 'Buscando productos', product_quant: 'espere', product_name: 'x', product_prov: 'x', product_codigo: ''}
+    const [client, setClient] = useState([
+        {client_id: 'x', client_name: 'Buscando productos', client_address: 'espere', client_number: '', client_ced: ''}
     ]);
 
     const [data, setData] = useState('');
@@ -51,21 +51,21 @@ const Inventario = () => {
     }
 
     useEffect(() => {
-        getProducts();
+        getClients();
     },[]);
 
-    const getProducts = () => {
-        axios("http://localhost:3001/inventario/get", {
+    const getClients = () => {
+        axios("http://localhost:3001/clients/get", {
             method: 'get',
             headers: {"Content-Type": "application/json"}
         })
         .then((res)=>{
             console.log(res);
             if(res.data.msg.length > 0)
-                setProduct(res.data.msg);
+                setClient(res.data.msg);
             else
-                setProduct([
-                    {product_id: 'x', product_name: 'No se encuentran', product_quant: 'datos'}
+                setClient([
+                    {client_id: 'x', client_name: 'No se encuentran', client_address: 'datos'}
                 ])
         })
         .catch((err)=>{
@@ -75,35 +75,33 @@ const Inventario = () => {
 
     const select = (id) =>{
         console.log(id);
-        let filter = product.filter(product =>{
-            return product.product_id === id
+        let filter = client.filter(client =>{
+            return client.client_id === id
         })
         setData(filter[0]);
     }
 
-    const rows = product.map((product, index) => {
-        const {product_id, product_name, product_quant, product_precio, product_prov, product_codigo} = product;
+    const rows = client.map((client, index) => {
+        const {client_id, client_name, client_address, client_number, client_ced} = client;
         return(
-            <tr key={product_id} onClick={(e)=>{select(product_id)}}>
-                <td>{product_name}</td>
-                <td>{product_quant}</td>
-                <td>{product_precio}</td>
-                <td>{product_prov}</td>
-                <td>{product_codigo}</td>
+            <tr key={client_id} onClick={(e)=>{select(client_id)}}>
+                <td>{client_name}</td>
+                <td>{client_address}</td>
+                <td>{client_number}</td>
+                <td>{client_ced}</td>
             </tr>
         )
     })
 
-    const search = product.map((product, index) => {
-        const {product_id, product_name, product_quant, product_precio, product_prov, product_cod} = product;
-        if(product_name.toLowerCase().includes(filter.toLowerCase()) === true){
+    const search = client.map((client, index) => {
+        const {client_id, client_name, client_address, client_number, client_ced} = client;
+        if(client_name.toLowerCase().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={product_id} onClick={(e)=>{select(product_id)}}>
-                    <td>{product_name}</td>
-                    <td>{product_quant}</td>
-                    <td>{product_precio}</td>
-                    <td>{product_prov}</td>
-                    <td>{product_cod}</td>
+                <tr key={client_id} onClick={(e)=>{select(client_id)}}>
+                    <td>{client_name}</td>
+                    <td>{client_address}</td>
+                    <td>{client_number}</td>
+                    <td>{client_ced}</td>
                 </tr>
             )
         }else
@@ -113,15 +111,14 @@ const Inventario = () => {
     return ( 
         <div>
             <div>
-                <h2>INVENTARIO</h2>
+                <h2>CLIENTES</h2>
                 <table>
                     <tbody>
                         <tr>
                         <th>NOMBRE</th>
-                        <th>CANTIDAD</th>
-                        <th>PRECIO</th>
-                        <th>PROVEEDOR</th>
-                        <th>CODIGO</th>
+                        <th>DIRECCION</th>
+                        <th>NUMERO</th>
+                        <th>CEDULA</th>
                         </tr>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
@@ -140,9 +137,9 @@ const Inventario = () => {
                         <button>Volver</button>               
                     )}
             </div>
-            {visible ? (<PopInv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProducts}/>) : null}
+            {visible ? (<ModelCli changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getClients}/>) : null}
         </div>
      );
 }
  
-export default Inventario;
+export default Cliente;

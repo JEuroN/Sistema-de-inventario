@@ -4,6 +4,8 @@ const login = require('./BLogin');
 const personal = require('./BPersonal');
 const inventario = require('./BInventario');
 const proveedor = require('./BProveedor');
+const ventas = require('./BVentas');
+const cliente = require('./BCliente');
 
 const serv = express();
 serv.use(cors());
@@ -19,11 +21,15 @@ serv.use(function(req, res, next) {
 
 serv.use('/', login);
 
-serv.use('/personal/', personal);
+serv.use('/personal', personal);
 
 serv.use('/inventario', inventario);
 
 serv.use('/providers', proveedor);
+
+serv.use('/sales', ventas);
+
+serv.use('/clients', cliente);
 
 serv.listen(3001, () => {
     console.log('Conectado exitosamente!');

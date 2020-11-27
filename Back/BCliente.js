@@ -11,15 +11,15 @@ serv.use(express.static(__dirname + '/static'));
 const router = express.Router();
 
 router.get('/get', (req,res,next) => {
-    crud.select(crud.selectA('product'))
-    .then((results)=>{
-        res.send({msg:results, status: 200});
+    crud.select(crud.selectA('cliente'))
+    .then((r) => {
+        console.log(r);
+        res.send({msg: r, status: 200});
     })
-    .catch((err)=>{
-        console.log(err);
-        res.send({msg:err, status: 404})
+    .catch((e)=>{
+        res.send({msg: e, status: 400});
     })
-});
+})
 
 router.post('/crud', (req,res,next) =>{
     const {choice, data} = req.body;
@@ -27,17 +27,17 @@ router.post('/crud', (req,res,next) =>{
     switch(choice){
         case 0:
             //Eliminar
-            crud.simple(crud.delete(data.id, 'product_id', 'product'))
+            crud.simple(crud.delete(data.id, 'client_id', 'cliente'))
             .then((r)=>{
                 res.send({msg: 'Exito eliminando!', status: 200});
             })
             .catch((err)=>{
-                res/send({msg: err, status: 400});
+                res.send({msg: err, status: 400});
             })
             break;
         case 1:
             //Agregar
-            crud.simple(crud.add_product(data.quant, data.name, data.prod, data.product_precio, data.prod, data.cod))
+            crud.simple(crud.add_client(data.name, data.numero, data.adrs, data.ced))
             .then((r)=>{
                 res.send({msg: 'Exito eliminando!', status: 200});
             })
@@ -47,7 +47,7 @@ router.post('/crud', (req,res,next) =>{
             break;
         case 3:
             //Actualizar
-            crud.simple(crud.upd_product(data.id, data.name, data.quant, data.prod, data.product_precio, data.cod))
+            crud.simple(crud.upd_client(data.id, data.name, data.numero, data.adrs, data.ced))
             .then((r)=>{
                 res.send({msg: 'Exito actualizando!', status: 200});
             })
@@ -60,5 +60,6 @@ router.post('/crud', (req,res,next) =>{
             break;
     }
 })
+
 
 module.exports = router;

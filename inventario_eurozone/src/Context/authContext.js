@@ -32,7 +32,7 @@ class AuthCont extends Component{
 
     render(){
         return(
-            <AuthContext.Provider value={{...this.state, toggleAuth: this.toggleAuth, toggleAdmin: this.toggleAdmin}}>
+            <AuthContext.Provider value={{...this.state, resetState: this.resetState, toggleAuth: this.toggleAuth, toggleAdmin: this.toggleAdmin}}>
                 {this.props.children}
             </AuthContext.Provider>
         )
