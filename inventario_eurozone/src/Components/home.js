@@ -1,17 +1,21 @@
 import react, {useContext, useEffect} from 'react'
-import AuthCont from '../Context/authContext';
+import {AuthContext} from '../Context/authContext';
 import {useHistory} from 'react-router-dom'
 
 const Home = () => {
 
-    const {isAuth} = useContext(AuthCont);
+    const {isAuth} = useContext(AuthContext);
 
-    const {history} = useHistory();
+    const history = useHistory();
 
-    useEffect(() => {
-        if(isAuth)
+    const check = () =>{
+        if(!isAuth)
             history.push('/')
-    }, [])
+    }
+
+
+    useEffect(check, [isAuth])
+
 
     return(
         <div>

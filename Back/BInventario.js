@@ -55,6 +55,27 @@ router.post('/crud', (req,res,next) =>{
                 res.send({msg:err, status: 400});
             })
             break;
+        case 4:
+            //Buscar
+            console.log(data);
+            crud.select(crud.like_product_name(data))
+            .then((nres)=>{
+                if(nres.length > 0)
+                    res.send({msg: nres, status: 200});
+                else{
+                    crud.select(crud.like_product_id(data))
+                    .then((idres)=>{
+                        res.send({msg: idres, status: 200})
+                    })
+                    .catch((err)=>{
+                        res.send({msg: err, status: 400})
+                    })
+                }
+            })
+            .catch((err)=>{
+                res.send({msg: err, status: 400});
+            })
+            break;
         default:
             //Error
             break;

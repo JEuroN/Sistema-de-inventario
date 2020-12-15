@@ -83,6 +83,17 @@ module.exports = {
     },
     select_client: (name) => {
         return `SELECT * FROM cliente WHERE client_name='${name}' OR client_ced='${name}'`
+    },
+    like_product_name: (name) => {
+        return `SELECT * FROM product WHERE product_name ILIKE '%${name}%';`
+    },
+    like_product_id: (id) => {
+        return `SELECT * FROM product WHERE CAST(product_codigo AS TEXT) LIKE '%${id}}%;'`
+    },
+    like_client_name: (name) =>{
+        return `SELECT * FROM cliente WHERE client_name ILIKE '%${name}%';`
+    },
+    like_client_id: (id) =>{
+        return `SELECT * FROM cliente WHERE CAST(client_ced AS TEXT) ILIKE '%${id}%';`
     }
-
 }

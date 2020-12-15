@@ -126,7 +126,7 @@ const Proveedor = () => {
             </div>
             <div>
                 <input onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
-                {!isAdmin ? (
+                {isAdmin ? (
                     <div>
                         <button onClick={()=>{changeVis(1)}}>Agregar</button>
                         <button onClick={()=>{changeVis(3)}}>Modificar</button>

@@ -34,6 +34,7 @@ const Login = () => {
                 case 1:
                     console.log('goi');
                     toggleAuth(res.data.name);
+                    console.log(res.data);
                     history.push('/home');
                 break;
                 default:

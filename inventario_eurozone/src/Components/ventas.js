@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import Monto from './Monto'
 import VentasInf from './VentasInf'
+import SearchProd from './SearchProd'
 import { AuthContext } from '../Context/authContext'
 
 const Ventas = () => {
@@ -11,6 +12,8 @@ const Ventas = () => {
     const [submit, setSubmit] = useState('');
 
     const [montoT, setMontoT] = useState(0);
+
+    const [visible, setVisible] = useState(false);
 
     const makeList = list.map(product => {
          const {key, name, precio, cod, cant} = product;
@@ -80,6 +83,8 @@ const Ventas = () => {
                     <input value={submit} onChange={(e)=>{setSubmit(e.target.value)}} />
                     <input type='submit' value='Agregar'/>
                 </form>
+                <button onClick={()=>{setVisible(!visible)}}>Buscar</button>
+                {visible ? (<SearchProd list={list} setList={setList} changeVis={()=>{setVisible(!visible)}}/>) : (null)}
                 <table>
                     <tbody>
                         <tr>

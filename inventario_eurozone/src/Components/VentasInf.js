@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from 'axios'
 import {AuthContext} from '../Context/authContext'
+import SearchClient from "./SearchCli";
 
 const VentasInf = () => {
 
@@ -9,6 +10,8 @@ const VentasInf = () => {
     const [client, setClient] = useState('')
 
     const [clientData, setData] = useState({client_name: 'Introduzca la cedula'});
+
+    const [visible, setVisible] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,6 +35,10 @@ const VentasInf = () => {
         })
     }
 
+    const changeVis = () =>{
+        setVisible(!visible);
+    }
+
     return ( 
         <div>
             <label>Empleado</label>
@@ -42,6 +49,8 @@ const VentasInf = () => {
                 <input value={client} onChange={(e)=>(setClient(e.target.value))} required/>
                 <input type='submit' value='Buscar' />
             </form>
+            <button onClick={changeVis}>Buscar</button>
+            {visible ? (<SearchClient setnClient={setData} changeVis={changeVis} />) : (null)}
         </div> 
     );
 }
