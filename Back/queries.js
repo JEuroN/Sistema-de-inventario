@@ -54,6 +54,9 @@ module.exports = {
     log_login: (name, pass) => {
         return `SELECT * FROM WORKER WHERE worker_name='${name}' AND worker_password='${pass}';`
     },
+    selectProdId: (id) => {
+        return `SELECT * FROM product WHERE product_id=${id}`
+    },
     upDate: (date, name, pass) => {
         return `UPDATE worker SET worker_login='${date}' WHERE worker_name='${name}' AND worker_password='${pass}'`
     },
@@ -95,5 +98,15 @@ module.exports = {
     },
     like_client_id: (id) =>{
         return `SELECT * FROM cliente WHERE CAST(client_ced AS TEXT) ILIKE '%${id}%';`
+    },
+    add_sale: (client_id, work_id, date, sale_number, montot) =>{
+        return `INSERT INTO sale(client_id, worker_id, sale_date, sale_number, sale_amount) VALUES('${client_id}', '${work_id}','${date}','${sale_number}','${montot}') RETURNING sale_id`
+    },
+    product_sale: (prod_id, prod_cuant, sale_id, sale_number) =>{
+        return `INSERT INTO product_sale(product_id, product_quantity, sale_id, sale_number) VALUES('${prod_id}', '${prod_cuant}', '${sale_id}', '${sale_number}')`
+    },
+    get_detalle: (number, clientid, workid) =>{
+        return `SELECT * FROM product_sale JOIN sale ON product_sale.sale_number = ${number} JOIN cliente ON cliente.client_id = ${clientid} JOIN worker ON worker.worker_id = ${workid}`
     }
+    
 }

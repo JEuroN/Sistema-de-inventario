@@ -134,11 +134,8 @@ const Inventario = () => {
                         <button onClick={()=>{changeVis(1)}}>Agregar</button>
                         <button onClick={()=>{changeVis(3)}}>Modificar</button>
                         <button onClick={()=>{changeVis(0)}}>Eliminar</button>
-                        <button>Volver</button>
                     </div>
-                    ) : (
-                        <button>Volver</button>               
-                    )}
+                    ) : null}
             </div>
             {visible ? (<PopInv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProducts}/>) : null}
         </div>

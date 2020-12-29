@@ -11,9 +11,10 @@ function Navbar(){
                 <div>
                 <div>
                     <ul>
-                        <li><Link  to='/home'>Home</Link></li>
-                        <li><Link  to="/personal">Personal</Link></li>
-                        <li><Link  to='/sales'>Ventas</Link></li>
+                        <li><Link to='/home'>Home</Link></li>
+                        <li><Link to="/personal">Personal</Link></li>
+                        <li><Link to='/sales'>Ventas</Link></li>
+                        <li><Link to='/factura'>Facturas</Link></li>
                         { isAdmin ? (<li><Link  to='/inventario'>Inventario</Link></li>): null }
                         { isAdmin ? (<li><Link  to='/providers'>Proveedores</Link></li>): null }
                         { isAdmin ? (<li><Link  to='/clients'>Cliente</Link></li>): null }

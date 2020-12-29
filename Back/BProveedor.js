@@ -32,7 +32,7 @@ router.post('/crud', (req,res,next) =>{
                 res.send({msg: 'Exito eliminando!', status: 200});
             })
             .catch((err)=>{
-                res/send({msg: err, status: 400});
+                res.send({msg: err, status: 400});
             })
             break;
         case 1:

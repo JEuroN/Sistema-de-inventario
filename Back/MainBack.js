@@ -6,6 +6,7 @@ const inventario = require('./BInventario');
 const proveedor = require('./BProveedor');
 const ventas = require('./BVentas');
 const cliente = require('./BCliente');
+const factura = require('./BFactura');
 
 const serv = express();
 serv.use(cors());
@@ -30,6 +31,8 @@ serv.use('/providers', proveedor);
 serv.use('/sales', ventas);
 
 serv.use('/clients', cliente);
+
+serv.use('/factura', factura)
 
 serv.listen(3001, () => {
     console.log('Conectado exitosamente!');

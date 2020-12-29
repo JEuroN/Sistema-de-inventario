@@ -5,20 +5,23 @@ export const AuthContext = createContext();
 class AuthCont extends Component{
     state = {
         isAuth: '',
+        isId: '',
         isAdmin: false
     }
 
 
-    toggleAuth = (name) => {
+    toggleAuth = (name, id) => {
         this.setState({
             isAuth: name,
+            isId: id,
             isAdmin: this.state.isAdmin
         })
     }
 
-    toggleAdmin = (name) => {
+    toggleAdmin = (name, id) => {
         this.setState({
             isAuth: name,
+            isId: id,
             isAdmin: !this.state.isAdmin
         })
     }
@@ -26,6 +29,7 @@ class AuthCont extends Component{
     resetState = () =>{
         this.setState({
             isAuth: '',
+            isId: '',
             isAdmin: false
         })
     }

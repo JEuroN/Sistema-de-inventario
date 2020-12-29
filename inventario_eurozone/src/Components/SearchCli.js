@@ -1,5 +1,6 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from 'axios'
+import ModelCli from './ModelCli'
 
 const SearchClient = (props) => {
 
@@ -10,6 +11,8 @@ const SearchClient = (props) => {
     ]);
 
     const [data, setData] = useState('');
+
+    const [modalVis, setModalVis] = useState(false);
 
     const {setnClient, changeVis} = props;
 
@@ -80,6 +83,8 @@ const SearchClient = (props) => {
                 </table>
                 <button onClick={addClient}>Seleccionar</button>
                 <button onClick={changeVis}>Volver</button>
+                <button onClick={()=>{setModalVis(!modalVis)}}>Añadir</button>
+                {modalVis ? (<ModelCli changeVis={()=>{setModalVis(!modalVis)}} selected={''} choice={1} act={()=>{console.log('Agregado!')}}/>) : null}
             </div>
         </div>
      );

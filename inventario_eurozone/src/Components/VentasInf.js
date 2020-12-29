@@ -3,13 +3,13 @@ import axios from 'axios'
 import {AuthContext} from '../Context/authContext'
 import SearchClient from "./SearchCli";
 
-const VentasInf = () => {
+const VentasInf = (props) => {
 
     const {isAuth} = useContext(AuthContext);
 
     const [client, setClient] = useState('')
 
-    const [clientData, setData] = useState({client_name: 'Introduzca la cedula'});
+    const {clientData, setData} = props;
 
     const [visible, setVisible] = useState(false);
 

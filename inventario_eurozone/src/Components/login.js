@@ -28,12 +28,12 @@ const Login = () => {
             switch(res.data.msg){
                 case 0:
                     console.log('gei');
-                    toggleAdmin(res.data.name);
+                    toggleAdmin(res.data.name, res.data.id);
                     history.push('/home');
                 break;
                 case 1:
                     console.log('goi');
-                    toggleAuth(res.data.name);
+                    toggleAuth(res.data.name, res.data.id);
                     console.log(res.data);
                     history.push('/home');
                 break;

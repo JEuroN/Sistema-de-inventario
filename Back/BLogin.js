@@ -20,9 +20,9 @@ router.post('/login', (req, res, next) => {
             .then((updateRes) => {
                 console.log("Updated!");
                 if(queryRes[0].ismanager == true){
-                    res.send({msg:0, status:200, name:queryRes[0].worker_name})
+                    res.send({msg:0, status:200, name:queryRes[0].worker_name, id:queryRes[0].worker_id})
                 }else
-                    res.send({msg:1, status:200, name:queryRes[0].worker_name});
+                    res.send({msg:1, status:200, name:queryRes[0].worker_name, id:queryRes[0].worker_id});
             })
             .catch((err) => {
                 console.log(err);

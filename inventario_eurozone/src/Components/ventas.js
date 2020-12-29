@@ -7,6 +7,8 @@ import { AuthContext } from '../Context/authContext'
 
 const Ventas = () => {
 
+    const {isAuth, isId} = useContext(AuthContext)
+
     const [list, setList] = useState([]);
 
     const [submit, setSubmit] = useState('');
@@ -14,6 +16,8 @@ const Ventas = () => {
     const [montoT, setMontoT] = useState(0);
 
     const [visible, setVisible] = useState(false);
+
+    const [clientData, setData] = useState({client_name: 'Introduzca la cedula'});
 
     const makeList = list.map(product => {
          const {key, name, precio, cod, cant} = product;
@@ -45,13 +49,14 @@ const Ventas = () => {
          })
          .then((res)=>{
             console.log(res);
-            let {product_name, product_precio, product_id, product_codigo} = res.data.msg[0];
+            let {product_name, product_precio, product_id, product_codigo, product_quant, product_prov} = res.data.msg[0];
             const exist = list.findIndex(item => item.name === product_name);
-            console.log(exist);
-            if(exist === -1){
-                setList([...list, {name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1}])
-            }
-            else{
+            if(exist === -1 ){
+                if(list[0] === undefined || list[0].key === -1 )
+                    setList([{name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov}])
+                else
+                    setList([...list, {name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov}])
+            }else{
                 let newArray = [...list];
                 let Arr = {...newArray[exist]};
                 Arr.cant += 1;
@@ -62,6 +67,27 @@ const Ventas = () => {
          .catch((err)=>{
              console.log(err);
          })
+     }
+
+     const handlePago = () => {
+         if(list.length === 0 || list[0].key === -1){
+             setList([{name: "Por favor, inserte un producto", precio: 0, cant: 0, key:-1}]);
+         }else if(clientData.client_id == null){
+             setData({name: "Por favor, ingrese un cliente"});
+         }else{
+            axios("http://localhost:3001/sales/bill", {
+            method: 'POST',
+            data: {list: list, client: clientData, id: isId, worker: isAuth, monto: montoT}, 
+            headers: {"Content-Type": "application/json"}
+            })
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch((err)=>{
+                console.log(err);
+            }) 
+         }
+     
      }
 
      const deleteList = (key) => {
@@ -77,7 +103,7 @@ const Ventas = () => {
         <div>
             <div>
                 <Monto prop={list} montoT={montoT} />
-                <VentasInf />
+                <VentasInf clientData={clientData} setData={setData} />
                 <h2>PRODUCTOS</h2>
                 <form onSubmit={(e)=>{handleSubmit(e)}}>
                     <input value={submit} onChange={(e)=>{setSubmit(e.target.value)}} />
@@ -97,6 +123,7 @@ const Ventas = () => {
                     </tbody>
                 </table>   
             </div>     
+            <button onClick={handlePago}>Procesar Pago</button>
         </div>
     )
 }

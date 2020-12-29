@@ -37,11 +37,14 @@ const SearchProd = (prop) => {
 
     const AddProd = () => {
         console.log(data);
-        let {product_name, product_precio, product_id, product_codigo} = data;
+        let {product_name, product_precio, product_id, product_codigo, product_quant, product_prov} = data;
         const exist = list.findIndex(item => item.name === product_name);
         console.log(exist);
         if(exist === -1){
-            setList([...list, {name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1}])
+            if(list[0] === undefined || list[0].key === -1 )
+                setList([{name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov}])
+            else
+                setList([...list, {name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov}])
         }
         else{
             let newArray = [...list];

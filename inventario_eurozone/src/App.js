@@ -8,6 +8,7 @@ import Cliente from './Components/Cliente'
 import Ventas from './Components/ventas'
 import Home from './Components/home'
 import Navbar from './Components/navBar'
+import Factura from './Components/Facturas'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route exact path='/inventario' component={Inventario} />
           <Route exact path='/sales' component={Ventas} />
           <Route exact path='/personal' component={Personal} />
+          <Route exact path='/factura' component={Factura} />
         </BrowserRouter>
       </AuthContext>
     </div>
