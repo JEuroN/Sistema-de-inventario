@@ -2,6 +2,8 @@ import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import ModelCli from './ModelCli'
+import './../Assets/App.css'
+
 
 const Cliente = () => {
 
@@ -30,6 +32,7 @@ const Cliente = () => {
                     break;
                 case 1:
                     //Crear
+                    setData('');
                     setVisible(!visible);
                     setChoice(1)
                     break;
@@ -79,12 +82,13 @@ const Cliente = () => {
             return client.client_id === id
         })
         setData(filter[0]);
-    }
+    }    
+    
 
     const rows = client.map((client, index) => {
         const {client_id, client_name, client_address, client_number, client_ced} = client;
         return(
-            <tr key={client_id} onClick={(e)=>{select(client_id)}}>
+            <tr key={client_id} onClick={(e)=>{select(client_id)}} className={client_id === data.client_id ? 'light-blue lighten-2' : null}>
                 <td>{client_name}</td>
                 <td>{client_address}</td>
                 <td>{client_number}</td>
@@ -93,11 +97,13 @@ const Cliente = () => {
         )
     })
 
+
+
     const search = client.map((client, index) => {
         const {client_id, client_name, client_address, client_number, client_ced} = client;
         if(client_name.toLowerCase().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={client_id} onClick={(e)=>{select(client_id)}}>
+                <tr key={client_id} onClick={(e)=>{select(client_id)}} className={client_id === data.client_id ? 'light-blue lighten-2' : null}>
                     <td>{client_name}</td>
                     <td>{client_address}</td>
                     <td>{client_number}</td>
@@ -108,33 +114,38 @@ const Cliente = () => {
             return null;
     })
 
+
     return ( 
         <div>
-            <div>
-                <h2>CLIENTES</h2>
-                <table>
-                    <tbody>
+            <div className='container'>
+                <h2 className='center '>CLIENTES</h2>
+                <table className='striped centered responsive-table'>
+                    <thead>
                         <tr>
                         <th>NOMBRE</th>
                         <th>DIRECCION</th>
                         <th>NUMERO</th>
                         <th>CEDULA</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
                 </table>
             </div>
-            <div>
-                <input onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
-                {isAdmin ? (
-                    <div>
-                        <button onClick={()=>{changeVis(1)}}>Agregar</button>
-                        <button onClick={()=>{changeVis(3)}}>Modificar</button>
-                        <button onClick={()=>{changeVis(0)}}>Eliminar</button>
+            {visible ? (<ModelCli changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getClients}/>) : (
+                <div className='row container center-align'>
+                    <div className='section input-field'>
+                        <i className="material-icons col s1 push-s3 prefix">search</i>
+                        <input className='col s4 push-s3 black-text validate' placeholder='Busqueda' onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}}  id="search"/>
                     </div>
-                    ) : null}
-            </div>
-            {visible ? (<ModelCli changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getClients}/>) : null}
+                    <div className='center row col s12'>
+                        <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(1)}}>Agregar</button>
+                        <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(3)}}>Modificar</button>
+                        <button className='center waves-effect waves-light btn center' onClick={()=>{changeVis(0)}}>Eliminar</button>
+                    </div>
+                </div>
+                )}
         </div>
      );
 }

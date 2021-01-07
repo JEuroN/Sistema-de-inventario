@@ -30,7 +30,10 @@ router.post('/crud', (req,res,next) =>{
             //Eliminar
             crud.simple(crud.delete(data.id, 'worker_id', 'worker'))
             .then((r)=>{
-                res.send({msg: 'Exito eliminando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res/send({msg: err, status: 400});
@@ -40,7 +43,10 @@ router.post('/crud', (req,res,next) =>{
             //Agregar
             crud.simple(crud.add_worker(data.name,data.ced, currentDate.toLocaleDateString(), data.numero,data.puesto))
             .then((r)=>{
-                res.send({msg: 'Exito eliminando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res.send({msg: err, status: 400});
@@ -50,7 +56,10 @@ router.post('/crud', (req,res,next) =>{
             //Actualizar
             crud.simple(crud.upd_worker(data.name, currentDate.toLocaleDateString(), data.numero, data.ced, data.puesto, data.id))
             .then((r)=>{
-                res.send({msg: 'Exito actualizando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res.send({msg:err, status: 400});

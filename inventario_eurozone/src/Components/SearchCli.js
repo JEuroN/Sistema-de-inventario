@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from 'axios'
 import ModelCli from './ModelCli'
+import Modal from 'react-modal'
 
 const SearchClient = (props) => {
 
@@ -28,7 +29,7 @@ const SearchClient = (props) => {
     const rows = client.map((client, index) => {
         const {client_id, client_name, client_address, client_number, client_ced} = client;
         return(
-            <tr key={client_id} onClick={(e)=>{select(client_id)}}>
+            <tr key={client_id} onClick={(e)=>{select(client_id)}} className={client_id === data.client_id ? 'light-blue lighten-2' : null}>
                 <td>{client_name}</td>
                 <td>{client_address}</td>
                 <td>{client_number}</td>
@@ -63,29 +64,35 @@ const SearchClient = (props) => {
     }
 
     return ( 
-        <div>
+        <div className='container'>
+            <Modal isOpen={true} ariaHideApp={false}>
+            <div className='center'>
+            <h2 className='center'>CLIENTES</h2>
             <form onSubmit={handleSubmit}>
-                <input value={name} onChange={(e)=>{setName(e.target.value)}} />
-                <input type="submit" placeholder="Buscar"/>
+                <div className='row'>
+                    <input className='col s4 push-s4 black-text validate' value={name} onChange={(e)=>{setName(e.target.value)}} />
+                    <input className='col s1 push-s4 center waves-effect waves-light btn center' type="submit" placeholder="Buscar"/>
+                </div>
             </form>
-            <div>
-            <h2>CLIENTES</h2>
-                <table>
-                    <tbody>
+                <table className='striped centered responsive-table'>
+                    <thead>
                         <tr>
                         <th>NOMBRE</th>
                         <th>DIRECCION</th>
                         <th>NUMERO</th>
                         <th>CEDULA</th>
                         </tr>
+                    </thead>
+                    <tbody style={{height: '200px'}}>
                         {rows}
                     </tbody>
                 </table>
-                <button onClick={addClient}>Seleccionar</button>
-                <button onClick={changeVis}>Volver</button>
-                <button onClick={()=>{setModalVis(!modalVis)}}>Añadir</button>
+                <button className='center waves-effect waves-light btn center' onClick={addClient}>Seleccionar</button>
+                <button className='center waves-effect waves-light btn center' onClick={changeVis}>Volver</button>
+                <button className='center waves-effect waves-light btn center' onClick={()=>{setModalVis(!modalVis)}}>Añadir</button>
                 {modalVis ? (<ModelCli changeVis={()=>{setModalVis(!modalVis)}} selected={''} choice={1} act={()=>{console.log('Agregado!')}}/>) : null}
             </div>
+            </Modal>
         </div>
      );
 }

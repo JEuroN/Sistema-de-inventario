@@ -29,7 +29,10 @@ router.post('/crud', (req,res,next) =>{
             //Eliminar
             crud.simple(crud.delete(data.id, 'product_id', 'product'))
             .then((r)=>{
-                res.send({msg: 'Exito eliminando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res/send({msg: err, status: 400});
@@ -37,19 +40,77 @@ router.post('/crud', (req,res,next) =>{
             break;
         case 1:
             //Agregar
-            crud.simple(crud.add_product(data.quant, data.name, data.prod, data.product_precio, data.prod, data.cod))
+            crud.select(crud.select_provider(data.prod))
             .then((r)=>{
-                res.send({msg: 'Exito eliminando!', status: 200});
-            })
-            .catch((err)=>{
-                res.send({msg: err, status: 400});
+                if(r[0]!==undefined){
+                    let {provider_id} = r[0];
+                    crud.select(crud.add_product_return_id(data.quant, data.name, data.prod, data.product_precio, data.cod))
+                    .then((id)=>{
+                        if(id[0] !== false){
+                            let {product_id} = id[0]
+                            crud.simple(crud.add_product_provide(provider_id, product_id))
+                            .then((re)=>{
+                                res.send({msg: 'Exito eliminando!', status: 200});
+                            }).catch((err)=>{
+                                res.send({msg: false, status: 400})
+                            })
+                        }else{
+                            res.send({msg: false, status: 400})
+                        }
+                    })
+                    .catch((err)=>{
+                        res.send({msg: false, status: 400});
+                    })
+                    
+                }else{
+                    console.log()
+                    crud.select(crud.add_provider('Desconocido', data.name, "Desconocido", 0, data.prod))
+                    .then((r)=>{
+                        if(r[0] !== undefined){
+                            console.log('hace esto')
+                            let {provider_id} = r[0];
+                            crud.select(crud.add_product_return_id(data.quant, data.name, data.prod, data.product_precio, data.cod))
+                            .then((id)=>{
+                                if(id[0] !== false){
+                                let {product_id} = id[0]
+                                    crud.simple(crud.add_product_provide(provider_id, product_id))
+                                .then((re)=>{
+                                    res.send({msg: 'Exito eliminando!', status: 200});
+                                }).catch((err)=>{
+                                    res.send({msg: false, status: 400})
+                                })
+                            }else{
+                                res.send({msg: false, status: 400})
+                            }
+                            })
+                            .catch((err)=>{
+                                crud.simple(crud.delete(provider_id, "provider_id", 'provider'))
+                                .then((f)=>{
+                                    res.send({msg: false, status: 400});
+                                }).catch((r)=>{
+                                    res.send({msg: false, status: 400})
+                                })
+                            })
+
+                        }else{
+                            res.send({msg: false, status: 400})
+                        }
+                    }).catch((err)=>{
+                        res.send({msg: false, status: 400})
+                    })
+                }
+            }).catch((err)=>{
+                res.send({msg: false, status: 400})
             })
             break;
         case 3:
             //Actualizar
             crud.simple(crud.upd_product(data.id, data.name, data.quant, data.prod, data.product_precio, data.cod))
             .then((r)=>{
-                res.send({msg: 'Exito actualizando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res.send({msg:err, status: 400});
@@ -68,7 +129,7 @@ router.post('/crud', (req,res,next) =>{
                         res.send({msg: idres, status: 200})
                     })
                     .catch((err)=>{
-                        res.send({msg: err, status: 400})
+                        res.send({msg: false, status: 400})
                     })
                 }
             })

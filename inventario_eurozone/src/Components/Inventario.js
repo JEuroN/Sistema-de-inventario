@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import PopInv from './modelInv'
+import './../Assets/App.css'
 
 const Inventario = () => {
 
@@ -30,6 +31,7 @@ const Inventario = () => {
                     break;
                 case 1:
                     //Crear
+                    setData('');
                     setVisible(!visible);
                     setChoice(1)
                     break;
@@ -84,7 +86,7 @@ const Inventario = () => {
     const rows = product.map((product, index) => {
         const {product_id, product_name, product_quant, product_precio, product_prov, product_codigo} = product;
         return(
-            <tr key={product_id} onClick={(e)=>{select(product_id)}}>
+            <tr key={product_id} onClick={(e)=>{select(product_id)}} className={product_id === data.product_id ? 'light-blue lighten-2' : null}>
                 <td>{product_name}</td>
                 <td>{product_quant}</td>
                 <td>{product_precio}</td>
@@ -98,7 +100,7 @@ const Inventario = () => {
         const {product_id, product_name, product_quant, product_precio, product_prov, product_cod} = product;
         if(product_name.toLowerCase().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={product_id} onClick={(e)=>{select(product_id)}}>
+                <tr key={product_id} onClick={(e)=>{select(product_id)}} className={product_id === data.product_id ? 'light-blue lighten-2' : null}>
                     <td>{product_name}</td>
                     <td>{product_quant}</td>
                     <td>{product_precio}</td>
@@ -112,10 +114,10 @@ const Inventario = () => {
 
     return ( 
         <div>
-            <div>
-                <h2>INVENTARIO</h2>
-                <table>
-                    <tbody>
+            <div className='container'>
+                <h2 className='center '>INVENTARIO</h2>
+                <table className='striped centered'>
+                    <thead>    
                         <tr>
                         <th>NOMBRE</th>
                         <th>CANTIDAD</th>
@@ -123,21 +125,25 @@ const Inventario = () => {
                         <th>PROVEEDOR</th>
                         <th>CODIGO</th>
                         </tr>
+                    </thead>
+                    <tbody className='tbody'>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
                 </table>
             </div>
-            <div>
-                <input onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
-                {!isAdmin ? (
-                    <div>
-                        <button onClick={()=>{changeVis(1)}}>Agregar</button>
-                        <button onClick={()=>{changeVis(3)}}>Modificar</button>
-                        <button onClick={()=>{changeVis(0)}}>Eliminar</button>
-                    </div>
-                    ) : null}
-            </div>
-            {visible ? (<PopInv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProducts}/>) : null}
+            {visible ? (<PopInv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProducts}/>) : (
+                <div className='row container center-align'>
+                <div className='section input-field'>
+                    <i className="material-icons col s1 push-s3 prefix">search</i>
+                    <input className='col s4 push-s3 black-text validate' placeholder='Busqueda' id='search' onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
+                </div>
+                <div className='center row col s12'>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(1)}}>Agregar</button>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }}  onClick={()=>{changeVis(3)}}>Modificar</button>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }}  onClick={()=>{changeVis(0)}}>Eliminar</button>
+                </div>
+                </div>
+                )}
         </div>
      );
 }

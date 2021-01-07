@@ -9,7 +9,7 @@ const VentasInf = (props) => {
 
     const [client, setClient] = useState('')
 
-    const {clientData, setData} = props;
+    const {clientData, setData, setOff, off} = props;
 
     const [visible, setVisible] = useState(false);
 
@@ -35,21 +35,34 @@ const VentasInf = (props) => {
         })
     }
 
-    const changeVis = () =>{
+    const changeVis = (e) =>{
+        e.preventDefault();
         setVisible(!visible);
+        setOff(!off)
     }
 
     return ( 
-        <div>
-            <label>Empleado</label>
-            <p>{isAuth}</p>
-            <label>Cliente</label>
-            <p>{clientData.client_name}</p>
+        <div className='center center-align'>
+            <div className='row'>
+                <div className='col s6'>
+                    <h3>Empleado</h3>
+                    <h5>{isAuth}</h5>
+                </div>
+                <div className='col s6 pull-s1'>
+                    <h3>Cliente</h3>
+                    {clientData.client_ced ? (<h5>{clientData.client_name} - {clientData.client_ced}</h5>) : (<h5>{clientData.client_name}</h5>)}
+                </div>
+            </div>
             <form onSubmit={handleSubmit}>
-                <input value={client} onChange={(e)=>(setClient(e.target.value))} required/>
-                <input type='submit' value='Buscar' />
+                <div className='col s12'>
+                    <i className="material-icons col s1 push-s2 prefix">search</i>
+                    <input className='col s6 push-s2 black-text validate' value={client} onChange={(e)=>(setClient(e.target.value))} required/>
+                </div>
+                { off ? (<div className='col s12'>
+                    <button className='center waves-effect waves-light btn center' type='submit'>Seleccionar</button>
+                    <button className='center waves-effect waves-light btn center' onClick={changeVis}>Buscar</button>
+                </div>) : null}
             </form>
-            <button onClick={changeVis}>Buscar</button>
             {visible ? (<SearchClient setnClient={setData} changeVis={changeVis} />) : (null)}
         </div> 
     );

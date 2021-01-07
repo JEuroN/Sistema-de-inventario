@@ -29,7 +29,10 @@ router.post('/crud', (req,res,next) =>{
             //Eliminar
             crud.simple(crud.delete(data.id, 'client_id', 'cliente'))
             .then((r)=>{
-                res.send({msg: 'Exito eliminando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res.send({msg: err, status: 400});
@@ -39,7 +42,10 @@ router.post('/crud', (req,res,next) =>{
             //Agregar
             crud.simple(crud.add_client(data.name, data.numero, data.adrs, data.ced))
             .then((r)=>{
-                res.send({msg: 'Exito eliminando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res.send({msg: err, status: 400});
@@ -49,7 +55,10 @@ router.post('/crud', (req,res,next) =>{
             //Actualizar
             crud.simple(crud.upd_client(data.id, data.name, data.numero, data.adrs, data.ced))
             .then((r)=>{
-                res.send({msg: 'Exito actualizando!', status: 200});
+                if(r===true)
+                    res.send({msg: 'Exito actualizando!', status: 200});
+                else
+                    res.send({msg: false, status: 400});
             })
             .catch((err)=>{
                 res.send({msg:err, status: 400});
@@ -57,7 +66,6 @@ router.post('/crud', (req,res,next) =>{
             break;
         case 4:
             //Buscar
-            console.log(data, 'hola');
             crud.select(crud.like_client_name(data))
             .then((nres)=>{
                 if(nres.length > 0)
@@ -68,7 +76,7 @@ router.post('/crud', (req,res,next) =>{
                         res.send({msg: idres, status: 200})
                     })
                     .catch((err)=>{
-                        res.send({msg: err, status: 400})
+                        res.send({msg: false, status: 400})
                     })
                 }
             })

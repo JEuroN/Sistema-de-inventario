@@ -19,7 +19,7 @@ router.post('/login', (req, res, next) => {
             crud.simple(crud.upDate(currentDate.toLocaleDateString(), name, pass))
             .then((updateRes) => {
                 console.log("Updated!");
-                if(queryRes[0].ismanager == true){
+                if(queryRes[0].isadmin == true){
                     res.send({msg:0, status:200, name:queryRes[0].worker_name, id:queryRes[0].worker_id})
                 }else
                     res.send({msg:1, status:200, name:queryRes[0].worker_name, id:queryRes[0].worker_id});

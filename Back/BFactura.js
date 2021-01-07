@@ -22,12 +22,11 @@ router.get('/get', (req,res,next)=>{
 })
 
 router.post('/getFact', (req, res, next) =>{
-    console.log(req.body)
     let productArr = [];
     let {sale_number, client_id, worker_id} = req.body.sale
     crud.select(crud.get_detalle(sale_number, client_id, worker_id))
     .then((dbres)=>{
-        for(let index = 0; index < dbres.length; index++) {
+            for(let index = 0; index < dbres.length; index++) {
             crud.select(crud.selectProdId(dbres[index].product_id))
             .then((r)=>{
                 productArr = [...productArr, ...r]

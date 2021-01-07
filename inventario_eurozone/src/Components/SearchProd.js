@@ -1,5 +1,7 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from 'axios'
+import Modal from 'react-modal'
+import './../Assets/App.css'
 
 const SearchProd = (prop) => {   
 
@@ -67,7 +69,7 @@ const SearchProd = (prop) => {
     const rows = product.map((product, index) => {
         const {product_id, product_name, product_quant, product_precio, product_codigo} = product;
         return(
-            <tr key={product_id} onClick={(e)=>{select(product_id)}}>
+            <tr key={product_id} onClick={(e)=>{select(product_id)}} className={product_id === data.product_id ? 'light-blue lighten-2' : null}>
                 <td>{product_name}</td>
                 <td>{product_quant}</td>
                 <td>{product_precio}</td>
@@ -77,28 +79,33 @@ const SearchProd = (prop) => {
     })
      
     return ( 
-    <div>
-        <form onSubmit={handleSubmit}>
-            <input value={prod} onChange={(e)=>{setProd(e.target.value)}} />
-            <input type="submit" value="Buscar"/>
-        </form>
-        <div>
-            <h2>INVENTARIO</h2>
-                <table>
-                    <tbody>
+    <div className='container'>
+        <Modal isOpen={true} ariaHideApp={false}>
+        <div className='center'>
+        <h2 className='center'>INVENTARIO</h2>
+            <form onSubmit={handleSubmit}>
+            <div className='row'>
+                <input className='col s4 push-s4 black-text validate' value={prod} onChange={(e)=>{setProd(e.target.value)}} />
+                <input className='col s1 push-s4 center waves-effect waves-light btn center' type="submit" value="Buscar"/>
+            </div>
+            </form>
+                <table className='striped centered responsive-table'>
+                    <thead>
                         <tr>
                         <th>NOMBRE</th>
                         <th>CANTIDAD</th>
                         <th>PRECIO</th>
                         <th>CODIGO</th>
                         </tr>
+                    </thead>
+                    <tbody style={{height: '200px'}}>
                         {rows}
                     </tbody>
                 </table>
-                <button onClick={AddProd}>Seleccionar</button>
-                <button onClick={changeVis}>Volver</button>
+                <button className='center waves-effect waves-light btn center' onClick={AddProd}>Seleccionar</button>
+                <button className='center waves-effect waves-light btn center' onClick={changeVis}>Volver</button>
             </div>
-
+            </Modal>
     </div> 
     );
 }
