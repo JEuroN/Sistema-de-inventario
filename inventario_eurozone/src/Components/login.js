@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import { useHistory } from 'react-router-dom'
+import './../Assets/App.css'
 
 const Login = () => {
 
@@ -50,16 +51,27 @@ const Login = () => {
     }
 
     return ( 
-        <div>
-            <form onSubmit={handleLogin}>
-                <label>Usuario</label>
-                <input type="text" placeholder="Usuario" value={User} onChange={(e) => setUser(e.target.value)}></input>
-                <label>Contraseña</label>
-                <input type="password" placeholder="Contraseña" value={Pass} onChange={(e) => setPass(e.target.value)}></input>
-                <input type="submit" value="Ingresar" />
-                <h2>{Bool ? ('Por favor ingrese su cuenta y contraseña') : ('Cuenta o contraseña incorrecta')}</h2>
-            </form>
-        </div>
+            <div className='row center-align'>
+                <div className='container'>
+                    <h2 className='center blue-grey-text text-darken-3'>Eurozone</h2>
+                <form onSubmit={handleLogin}>
+                    <div className='container center-align section row'>
+                        <input className='center col s6 push-s3 section' id='user' type="text" placeholder="Usuario" value={User} onChange={(e) => setUser(e.target.value)}></input>
+                    </div>
+                    <div className='container center-align section row'>
+                        <input className='center col s6 push-s3 section' id='pass' type="password" placeholder="Contraseña" value={Pass} onChange={(e) => setPass(e.target.value)}></input>
+                    </div>
+                    <div className='section'>
+                    {Pass ? (<button className="center waves-effect waves-light btn center" type="submit">Ingresar
+                        <i className="material-icons right">send</i>
+                    </button>) : (<button className="center btn disabled margin-top-12px" type="submit">Ingresar
+                        <i className="material-icons right">send</i>
+                    </button>)}
+                    </div>
+                        {Bool ? (<h3 className='center blue-grey-text text-darken-3'>Por favor ingrese su usuario y contraseña</h3>) : (<h3 className='center red-text text-darken-1'>Usuario o contraseña incorrecta</h3>)}
+                </form>
+                </div>
+            </div>
      );
 }
  

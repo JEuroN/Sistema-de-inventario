@@ -12,7 +12,7 @@ const Proveedor = () => {
     const [filter, setFilter] = useState('');
 
     const [provider, setProvider] = useState([
-        {provider_id: 'x', provider_name: 'Buscando', provider_prod: 'datos', provider_dir: 'espere', provider_num: 'x'}
+        {provider_id: 'x', provider_name: 'Buscando', provider_prod: 'datos', provider_dir: 'espere', provider_num: 'x', provider_ced: 'x'}
     ]);
 
     const [data, setData] = useState('');
@@ -30,6 +30,7 @@ const Proveedor = () => {
                     break;
                 case 1:
                     //Crear
+                    setData('')
                     setVisible(!visible);
                     setChoice(1)
                     break;
@@ -82,10 +83,11 @@ const Proveedor = () => {
     }
 
     const rows = provider.map((provider, index) => {
-        const {provider_id, provider_name, provider_prod, provider_dir, provider_num} = provider;
+        const {provider_id, provider_name, provider_prod, provider_dir, provider_num, provider_ced} = provider;
         return(
-            <tr key={provider_id} onClick={(e)=>{select(provider_id)}}>
+            <tr key={provider_id} onClick={(e)=>{select(provider_id)}} className={provider_id === data.provider_id ? 'light-blue lighten-2' : null}>
                 <td>{provider_name}</td>
+                <td>{provider_ced}</td>
                 <td>{provider_prod}</td>
                 <td>{provider_dir}</td>
                 <td>{provider_num}</td>
@@ -94,11 +96,12 @@ const Proveedor = () => {
     })
 
     const search = provider.map((provider, index) => {
-        const {provider_id, provider_name, provider_prod, provider_dir, provider_num} = provider;
-        if(provider_name.toLowerCase().includes(filter.toLowerCase()) === true){
+        const {provider_id, provider_name, provider_prod, provider_dir, provider_num, provider_ced} = provider;
+        if(provider_ced.toString().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={provider_id} onClick={(e)=>{select(provider_id)}}>
+                <tr key={provider_id} onClick={(e)=>{select(provider_id)}} className={provider_id === data.provider_id ? 'light-blue lighten-2' : null}>
                     <td>{provider_name}</td>
+                    <td>{provider_ced}</td>
                     <td>{provider_prod}</td>
                     <td>{provider_dir}</td>
                     <td>{provider_num}</td>
@@ -110,31 +113,36 @@ const Proveedor = () => {
 
     return ( 
         <div>
-            <div>
-                <h2>PROVEEDORES</h2>
-                <table>
-                    <tbody>
+            <div className='container'>
+                <h2 className='center '>PROVEEDORES</h2>
+                <table className='striped centered responsive-table'>
+                    <thead>
                         <tr>
-                        <th>NOMBRE</th>
-                        <th>PRODUCTO</th>
-                        <th>DIRECCION</th>
-                        <th>NUMERO</th>
+                            <th>NOMBRE</th>
+                            <th>CODIGO  </th>
+                            <th>PRODUCTO</th>
+                            <th>DIRECCION</th>
+                            <th>NUMERO</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
                 </table>
             </div>
-            <div>
-                <input onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
-                {isAdmin ? (
-                    <div>
-                        <button onClick={()=>{changeVis(1)}}>Agregar</button>
-                        <button onClick={()=>{changeVis(3)}}>Modificar</button>
-                        <button onClick={()=>{changeVis(0)}}>Eliminar</button>
-                    </div>
-                    ) : null}
+            {visible ? (<PopProv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProviders}/>) : (
+            <div className='row container center-align'> 
+                <div className='section input-field'>
+                    <i className="material-icons col s1 push-s3 prefix">search</i>
+                    <input className='col s4 push-s3 black-text validate' placeholder='Busqueda' id='search' onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
+                </div>
+                <div className='center row col s12'>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(1)}}>Agregar</button>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(3)}}>Modificar</button>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(0)}}>Eliminar</button>
+                </div>
             </div>
-            {visible ? (<PopProv changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getProviders}/>) : null}
+                )}
         </div>
      );
 }

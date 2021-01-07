@@ -9,6 +9,7 @@ import Ventas from './Components/ventas'
 import Home from './Components/home'
 import Navbar from './Components/navBar'
 import Factura from './Components/Facturas'
+import 'materialize-css/dist/css/materialize.min.css'
 
 function App() {
   return (

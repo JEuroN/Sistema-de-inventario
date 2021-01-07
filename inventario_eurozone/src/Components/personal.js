@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import PopUp from './modelPers'
+import './../Assets/App.css'
 
 const Personal = () => {
 
@@ -30,6 +31,7 @@ const Personal = () => {
                     break;
                 case 1:
                     //Crear
+                    setData('');
                     setVisible(!visible);
                     setChoice(1)
                     break;
@@ -84,7 +86,7 @@ const Personal = () => {
     const rows = Worker.map((worker, index) => {
         const {worker_id, worker_name, worker_login, worker_num, worker_ced, worker_assing} = worker;
         return(
-            <tr key={worker_id} onClick={(e)=>{select(worker_id)}}>
+            <tr key={worker_id} onClick={(e)=>{select(worker_id)}} className={worker_id === data.worker_id ? 'light-blue lighten-2' : null}>
                 <td>{worker_name}</td>
                 <td>{worker_login.split('T')[0]}</td>
                 <td>{worker_num}</td>
@@ -98,7 +100,7 @@ const Personal = () => {
         const {worker_id, worker_name, worker_login, worker_num, worker_ced, worker_assing} = worker;
         if(worker_name.toLowerCase().includes(filter.toLowerCase()) === true){
             return(
-                <tr key={worker_id} onClick={(e)=>{select(worker_id)}}>
+                <tr key={worker_id} onClick={(e)=>{select(worker_id)}} className={worker_id === data.worker_id ? 'light-blue lighten-2' : null}>
                     <td>{worker_name}</td>
                     <td>{worker_login.split('T')[0]}</td>
                     <td>{worker_num}</td>
@@ -112,10 +114,10 @@ const Personal = () => {
 
     return ( 
         <div>
-            <div>
-                <h2>PERSONAL</h2>
-                <table>
-                    <tbody>
+            <div className='container'>
+                <h2 className='center '>PERSONAL</h2>
+                <table className='striped centered responsive-table'>
+                    <thead>
                         <tr>
                         <th>NOMBRE</th>
                         <th>ULTIMA ACTIVIDAD</th>
@@ -123,21 +125,29 @@ const Personal = () => {
                         <th>CEDULA</th>
                         <th>PUESTO</th> 
                         </tr>
+                    </thead>
+                    <tbody>
                         {filter.length < 1 ? (rows) : (search)}
                     </tbody>
                 </table>
             </div>
-            <div>
-                <input onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
-                {!isAdmin ? (
-                    <div>
-                        <button onClick={()=>{changeVis(1)}}>Agregar</button>
-                        <button onClick={()=>{changeVis(3)}}>Modificar</button>
-                        <button onClick={()=>{changeVis(0)}}>Eliminar</button>
-                    </div>
-                    ) : null}
+            {visible ? (<PopUp changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getWorkers}/>) : (
+            <div className='row container center-align'>    
+                <div className='section input-field'>
+                    <i className="material-icons col s1 push-s3 prefix">search</i>
+                    <input id='search' className='col s4 push-s3 black-text validate' placeholder='Busqueda' onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
+                </div>
+                { isAdmin ? (
+                <div className='center row col s12'>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(1)}}>Agregar</button>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(3)}}>Modificar</button>
+                    <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={()=>{changeVis(0)}}>Eliminar</button>
+                </div>
+
+                ) : null}
+                   
             </div>
-            {visible ? (<PopUp changeVis={()=>{changeVis(2)}} selected={data} choice={choice} act={getWorkers}/>) : null}
+                )}
         </div>
      );
 }

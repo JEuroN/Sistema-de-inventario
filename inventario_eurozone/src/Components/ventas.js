@@ -4,6 +4,7 @@ import Monto from './Monto'
 import VentasInf from './VentasInf'
 import SearchProd from './SearchProd'
 import { AuthContext } from '../Context/authContext'
+import './../Assets/App.css'
 
 const Ventas = () => {
 
@@ -19,15 +20,18 @@ const Ventas = () => {
 
     const [clientData, setData] = useState({client_name: 'Introduzca la cedula'});
 
+    const [off, setOff] = useState(true);
+
     const makeList = list.map(product => {
-         const {key, name, precio, cod, cant} = product;
+         const {key, name, precio, cod, cant, quant} = product;
          return(
             <tr key={key}>
                 <td>{cod}</td>
                 <td>{name}</td>
                 <td>{cant}</td>
                 <td>{precio}</td>
-                <td><button onClick={()=>(deleteList(key))}>X</button></td>
+                <td>{quant}</td>
+                <td>{off ? (<button className='btn-floating btn-medium' onClick={()=>(deleteList(key))}><i class="material-icons b black-text">clear</i></button>) : null}</td>
             </tr>
      )
     })
@@ -53,9 +57,9 @@ const Ventas = () => {
             const exist = list.findIndex(item => item.name === product_name);
             if(exist === -1 ){
                 if(list[0] === undefined || list[0].key === -1 )
-                    setList([{name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov}])
+                    setList([{name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov, quant: product_quant}])
                 else
-                    setList([...list, {name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov}])
+                    setList([...list, {name: product_name, precio: product_precio, key: product_id, cod: product_codigo, cant: 1, exis: product_quant, prov: product_prov, quant: product_quant}])
             }else{
                 let newArray = [...list];
                 let Arr = {...newArray[exist]};
@@ -99,31 +103,57 @@ const Ventas = () => {
         setList(filter);
      }
 
+     const changeVisible = () =>{
+         setVisible(!visible);
+         setOff(!off);
+     }
+
     return(
-        <div>
-            <div>
+        <div className='row'>
+            <div className='row col s6'>
+                <div className='row col s12 center-align' style={{position: 'relative', marginLeft: '45px'}}>
+                    <div>
+                        <h3 className='center row'>PRODUCTOS</h3>
+                        <form onSubmit={(e)=>{handleSubmit(e)}}>
+                            <div className='col s12'>
+                                <i className="material-icons col s1 push-s2 prefix">search</i>
+                                <input className='col s6 push-s2 black-text validate' value={submit} onChange={(e)=>{setSubmit(e.target.value)}} />
+                            </div>
+                            {off ? (<div centerName='center'>
+                                <button className='center waves-effect waves-light btn center' type='submit'>Agregar</button>
+                                <button className='center waves-effect waves-light btn center' onClick={changeVisible}>Buscar</button>
+                            </div>) : null}
+                        </form>
+                    </div>
+                        {visible ? (<SearchProd list={list} setList={setList} changeVis={changeVisible}/>) : (null)}
+                </div>
+            </div>
+            <div className='container center col s6'>
+                    <VentasInf clientData={clientData} setOff={setOff} off={off} setData={setData} />
+            </div>
+            <div className='row col s6' style={{position: 'relative', marginTop: '-60px'}}>     
+                <div className='col s12 push-s1 container'>
+                    <table className='centered striped'>
+                        <thead className='thead-s'>
+                            <tr>
+                            <th>CODIGO</th>
+                            <th>NOMBRE</th>
+                            <th>CANT.</th>
+                            <th>PRECIO</th>
+                            <th>EXISTENCIA</th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        <tbody  className='tbody-s'>
+                            {makeList}
+                        </tbody>
+                    </table>   
+                </div>
+            </div>
+            <div className='col s6 container section center-align right' style={{position: 'relative', marginTop: '20px'}}>
                 <Monto prop={list} montoT={montoT} />
-                <VentasInf clientData={clientData} setData={setData} />
-                <h2>PRODUCTOS</h2>
-                <form onSubmit={(e)=>{handleSubmit(e)}}>
-                    <input value={submit} onChange={(e)=>{setSubmit(e.target.value)}} />
-                    <input type='submit' value='Agregar'/>
-                </form>
-                <button onClick={()=>{setVisible(!visible)}}>Buscar</button>
-                {visible ? (<SearchProd list={list} setList={setList} changeVis={()=>{setVisible(!visible)}}/>) : (null)}
-                <table>
-                    <tbody>
-                        <tr>
-                        <th>CODIGO</th>
-                        <th>NOMBRE</th>
-                        <th>CANT.</th>
-                        <th>PRECIO</th>
-                        </tr>
-                        {makeList}
-                    </tbody>
-                </table>   
-            </div>     
-            <button onClick={handlePago}>Procesar Pago</button>
+                {off ? (<button onClick={handlePago} className='center waves-effect waves-light btn center'>Procesar Pago</button>) : null}
+            </div>
         </div>
     )
 }

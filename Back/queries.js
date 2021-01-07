@@ -63,17 +63,23 @@ module.exports = {
     selectA: (table) => {
         return `SELECT * from ${table}`
     },
-    add_product: (quant, name, prod, precio, codigo) => {
-        return `INSERT INTO product(product_quant, product_name, product_prov, product_precio, product_codigo) VALUES (${quant}, '${name}', '${prod}', ${precio}, ${codigo})`
+    add_product_return_id: (quant, name, prod, precio, codigo) =>{
+        return `INSERT INTO product(product_quant, product_name, product_prov, product_precio, product_codigo) VALUES (${quant}, '${name}', '${prod}', ${precio}, '${codigo}') returning product_id`
     },
     upd_product: (id, name, quant, prod, precio, codigo) => {
-        return `UPDATE product SET product_name='${name}', product_quant='${quant}', product_prov='${prod}', product_precio='${precio}', product_codigo='${codigo}' WHERE product_id=${id}`
+        return `UPDATE product SET product_name='${name}', product_quant='${quant}', product_prov=${prod}, product_precio='${precio}', product_codigo='${codigo}' WHERE product_id=${id}`
     },
-    add_provider: (name, prod, dir, num) => {
-        return `INSERT INTO provider(provider_name, provider_prod, provider_dir, provider_num) VALUES ('${name}', '${prod}', '${dir}', '${num}')`
+    upd_product_ced_prov: (ced, lced) => {
+        return  `UPDATE product SET product_prov=${ced} WHERE product_prov=${lced}`
     },
-    upd_provider: (id, name, prod, dir, num) => {
-        return `UPDATE provider SET provider_name='${name}', provider_prod='${prod}', provider_dir='${dir}', provider_num='${num}' WHERE provider_id=${id}`
+    add_provider: (name, prod, dir, num, ced) => {
+        return `INSERT INTO provider(provider_name, provider_prod, provider_dir, provider_num, provider_ced) VALUES ('${name}', '${prod}', '${dir}', '${num}', ${ced}) returning provider_id`
+    },
+    select_provider: (id) =>{
+        return `SELECT * FROM provider WHERE provider_name='${id}' OR provider_ced=${id} OR provider_id=${id}`
+    },
+    upd_provider: (id, name, prod, dir, num, ced) => {
+        return `UPDATE provider SET provider_name='${name}', provider_prod='${prod}', provider_dir='${dir}', provider_num='${num}', provider_ced=${ced} WHERE provider_id=${id}` 
     },
     select_prod: (data) => {
         return `SELECT * FROM product WHERE product_name='${data}' OR product_codigo='${data}'`
@@ -99,6 +105,12 @@ module.exports = {
     like_client_id: (id) =>{
         return `SELECT * FROM cliente WHERE CAST(client_ced AS TEXT) ILIKE '%${id}%';`
     },
+    like_provider_id: (id) =>{
+        return `SELECT * FROM provider WHERE CAST(provider_ced AS TEXT) ILIKE '%${id}%';`
+    },
+    like_provider_name: (name) =>{
+        return `SELECT * FROM provider WHERE provider_name ILIKE '%${name}%';`
+    },
     add_sale: (client_id, work_id, date, sale_number, montot) =>{
         return `INSERT INTO sale(client_id, worker_id, sale_date, sale_number, sale_amount) VALUES('${client_id}', '${work_id}','${date}','${sale_number}','${montot}') RETURNING sale_id`
     },
@@ -107,6 +119,9 @@ module.exports = {
     },
     get_detalle: (number, clientid, workid) =>{
         return `SELECT * FROM product_sale JOIN sale ON product_sale.sale_number = ${number} JOIN cliente ON cliente.client_id = ${clientid} JOIN worker ON worker.worker_id = ${workid}`
+    },
+    add_product_provide: (id_prov, id_prod) =>{
+        return `INSERT INTO product_provider(provider_id, product_id) VALUES (${id_prov}, ${id_prod})`
     }
     
 }

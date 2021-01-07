@@ -46,7 +46,7 @@ const Facturas = () => {
     const rows = sale.map((sale, index) => {
         const {sale_id, sale_date, sale_amount, sale_number} = sale;
         return(
-            <tr key={sale_id} onClick={(e)=>{select(sale_id)}}>
+            <tr key={sale_id} onClick={(e)=>{select(sale_id)}} className={sale_id === data.sale_id ? 'light-blue lighten-2' : null}>
                 <td>{sale_number}</td>
                 <td>{sale_date.split('T')[0]}</td>
                 <td>{sale_amount}</td>
@@ -54,14 +54,14 @@ const Facturas = () => {
         )
     })
 
-    const search =sale.map((sale, index) => {
+    const search = sale.map((sale, index) => {
         const {sale_id, sale_date, sale_amount, sale_number} = sale;
         if(sale_number.toString().includes(filter) === true){
             return(
-                <tr key={sale_id} onClick={(e)=>{select(sale_id)}}>
+                <tr key={sale_id} onClick={(e)=>{select(sale_id)}} className={sale_id === data.sale_id ? 'light-blue lighten-2' : null}>
                     <td>{sale_number}</td>
                     <td>{sale_date.split('T')[0]}</td>
-                    <td>{sale_amount}</td>
+                    <td>{sale_amount} BsS</td>
                 </tr>
             )
         }else
@@ -69,30 +69,41 @@ const Facturas = () => {
     })
 
     const changeVis = () =>{
+        console.log(data);
         if(data)
             setVisible(!visible)
     }
 
     return ( 
     <div>
-        <div>
-            <h2>FACTURAS</h2>
-            <table>
-                <tbody>
+        <div className='container'>
+            <h2 className='center '>FACTURAS</h2>
+            <table className='striped centered responsive-table'>
+                <thead>
                     <tr>
                     <th>NUMERO</th>
                     <th>FECHA</th>
                     <th>MONTO</th>
                     </tr>
+                </thead>
+                <tbody>
                     {filter.length < 1 ? (rows) : (search)}
                 </tbody>
             </table>
         </div>
-        <div>
-            <input onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
-            <button onClick={changeVis}>Seleccionar</button>
-        </div>
-            {visible ? (<DetalleFactura changeVis={()=>{setVisible(!visible)}} selected={data}/>) : null}
+        <div className='row section cols12'>
+            {visible ? (<DetalleFactura changeVis={()=>{setVisible(!visible)}} selected={data}/>) : (
+        <div className='row container center-align'>
+            <div className='section input-field'>    
+                <i className="material-icons col s1 push-s3 prefix">search</i>
+                <input className='col s4 push-s3 black-text validate' placeholder='Busqueda' id='search' onChange={(e)=>{setFilter(e.target.value)}} onDoubleClick={(e)=>{setFilter('')}} />
+            </div>
+            <div className='center row col s12'>
+                <button className='center waves-effect waves-light btn center' style={{ marginRight: '40px !important' }} onClick={changeVis}>Seleccionar</button>
+            </div>
+        </div>  
+       )}
+       </div>
     </div> 
     );
 }
