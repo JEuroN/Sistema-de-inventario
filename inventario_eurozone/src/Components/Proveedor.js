@@ -2,10 +2,9 @@ import React, {useState, useContext, useEffect} from "react"
 import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import PopProv from './ModelProv'
+import {useHistory} from 'react-router-dom'
 
 const Proveedor = () => {
-
-    const {isAdmin} = useContext(AuthContext);
 
     const [visible, setVisible] = useState(false);
 
@@ -18,6 +17,18 @@ const Proveedor = () => {
     const [data, setData] = useState('');
 
     const [choice, setChoice] = useState('');
+
+    const {isAuth} = useContext(AuthContext);
+
+    const history = useHistory();
+
+    const check = () =>{
+        if(!isAuth)
+            history.push('/')
+    }
+
+
+    useEffect(check, [isAuth])
 
     const changeVis = (add) => {
         if(data.length !== 0 || add === 1 || add === 2){

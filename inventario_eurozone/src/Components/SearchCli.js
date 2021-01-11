@@ -59,8 +59,9 @@ const SearchClient = (props) => {
         })
     }
 
-    const addClient = () => {
+    const addClient = (e) => {
         setnClient(data);
+        changeVis(e);
     }
 
     return ( 

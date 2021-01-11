@@ -8,7 +8,7 @@ const Monto = (props) => {
     let name = prop.length ? (prop[prop.length - 1].name) : 'No existe';
 
     return ( 
-        <div className='section container row' style={{position: 'relative', marginLeft: '90px'}}>
+        <div className='section container row' style={{position: 'relative', marginLeft: '60px'}}>
             <div className='col s12'>
                 <h5>Ultimo producto</h5>
                 <p>{name} - {precio}BsS</p>

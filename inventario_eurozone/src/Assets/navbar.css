@@ -1,0 +1,47 @@
+
+header{
+    height: 0px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 50px;
+  background-color: #26a69a ;
+  height: 100%; /* Full height */
+  position: absolute; /* Make it stick, even on scroll */
+  overflow: hidden; /* Enable scrolling if the sidenav has too much content */
+  color: white;
+}
+
+.topMarginOn{
+    margin-top: -40px;
+}
+
+.topMarginOff{
+    margin-top: -5px;
+}
+
+.active{
+    background-color: #15665e
+}
+
+ul li{
+    margin-left: -20px;
+}
+
+li, li a{
+    display: flex;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    height: fit-content;
+    position: relative;
+  }
+  
+  /* Change the link color on hover */
+  li:hover {
+    background-color: #15665e;
+    color: white;
+  }

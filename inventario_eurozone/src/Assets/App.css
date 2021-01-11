@@ -72,14 +72,16 @@ thead, tbody tr {
 
 .tbody-s{
   display: block;
-  height: auto;
+  height: 320;
   max-height: 320px;
   overflow: auto;
+  background: #b2dfdb;
 }
 .thead-s, .tbody-s tr{
   display:table;
   width:100%;
   table-layout:fixed;
+  background: #e0f2f1 ;
 }
 
 .divN{

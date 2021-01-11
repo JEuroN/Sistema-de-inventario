@@ -3,10 +3,9 @@ import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import PopInv from './modelInv'
 import './../Assets/App.css'
+import { useHistory } from 'react-router-dom'
 
 const Inventario = () => {
-
-    const {isAdmin} = useContext(AuthContext);
 
     const [visible, setVisible] = useState(false);
 
@@ -19,6 +18,18 @@ const Inventario = () => {
     const [filter, setFilter] = useState('');
 
     const [choice, setChoice] = useState('');
+
+    const {isAuth} = useContext(AuthContext);
+
+    const history = useHistory();
+
+    const check = () =>{
+        if(!isAuth)
+            history.push('/')
+    }
+
+
+    useEffect(check, [isAuth])
 
     const changeVis = (add) => {
         if(data.length !== 0 || add === 1 || add === 2){

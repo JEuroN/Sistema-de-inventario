@@ -42,7 +42,7 @@ const VentasInf = (props) => {
     }
 
     return ( 
-        <div className='center center-align'>
+        <div className='center center-align' style={{marginRight: '-30px'}}>
             <div className='row'>
                 <div className='col s6'>
                     <h3>Empleado</h3>

@@ -3,11 +3,10 @@ import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import ModelCli from './ModelCli'
 import './../Assets/App.css'
+import {useHistory} from 'react-router-dom'
 
 
 const Cliente = () => {
-
-    const {isAdmin} = useContext(AuthContext);
 
     const [visible, setVisible] = useState(false);
 
@@ -20,6 +19,18 @@ const Cliente = () => {
     const [filter, setFilter] = useState('');
 
     const [choice, setChoice] = useState('');
+
+    const {isAuth} = useContext(AuthContext);
+
+    const history = useHistory();
+
+    const check = () =>{
+        if(!isAuth)
+            history.push('/')
+    }
+
+
+    useEffect(check, [isAuth])
 
     const changeVis = (add) => {
         if(data.length !== 0 || add === 1 || add === 2){

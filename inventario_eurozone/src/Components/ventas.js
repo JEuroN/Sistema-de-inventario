@@ -5,6 +5,7 @@ import VentasInf from './VentasInf'
 import SearchProd from './SearchProd'
 import { AuthContext } from '../Context/authContext'
 import './../Assets/App.css'
+import { useHistory } from 'react-router-dom'
 
 const Ventas = () => {
 
@@ -22,19 +23,47 @@ const Ventas = () => {
 
     const [off, setOff] = useState(true);
 
+    const [item, setItem] = useState([])
+
+    const [flash, setFlash] = useState('');
+
+    const history = useHistory();
+
+    const check = () =>{
+        if(!isAuth)
+            history.push('/')
+    }
+
+
+    useEffect(check, [isAuth])
+
     const makeList = list.map(product => {
          const {key, name, precio, cod, cant, quant} = product;
          return(
-            <tr key={key}>
+            <tr key={key} onClick={(e)=>{select(key)}} className={key === item.key ? 'light-blue lighten-2' : null}>
                 <td>{cod}</td>
                 <td>{name}</td>
-                <td>{cant}</td>
+                <td className={key === flash ? 'red' : null}>{cant}</td>
                 <td>{precio}</td>
                 <td>{quant}</td>
-                <td>{off ? (<button className='btn-floating btn-medium' onClick={()=>(deleteList(key))}><i class="material-icons b black-text">clear</i></button>) : null}</td>
             </tr>
      )
     })
+
+    const makeFlash = (id) => {
+        setFlash(id)
+        setTimeout(function(){
+            setFlash('');
+       },200);
+    }
+
+    const select = (id) =>{
+        console.log(id);
+        let filter = list.filter(product =>{
+            return product.key === id
+        })
+        setItem(filter[0]);
+    }  
 
     useEffect(() => {
         let element = 0;
@@ -94,11 +123,18 @@ const Ventas = () => {
      
      }
 
-     const deleteList = (key) => {
-        console.log(key);
+     const deleteList = (key, e) => {
+        e.preventDefault();
         let filter = list.filter(product => {
-            console.log(product);
-            return product.key !== key
+            if(product.key !== key)
+                return product
+            else{
+                if(product.cant > 1){
+                    product.cant --;
+                    makeFlash(product.key);
+                    return product;
+                }
+            }
         })
         setList(filter);
      }
@@ -110,7 +146,7 @@ const Ventas = () => {
 
     return(
         <div className='row'>
-            <div className='row col s6'>
+            <div className='row col s6' style={{display: 'flex'}}>
                 <div className='row col s12 center-align' style={{position: 'relative', marginLeft: '45px'}}>
                     <div>
                         <h3 className='center row'>PRODUCTOS</h3>
@@ -122,18 +158,15 @@ const Ventas = () => {
                             {off ? (<div centerName='center'>
                                 <button className='center waves-effect waves-light btn center' type='submit'>Agregar</button>
                                 <button className='center waves-effect waves-light btn center' onClick={changeVisible}>Buscar</button>
+                                <button className='center waves-effect waves-light btn center' onClick={(e)=>{deleteList(item.key, e)}}>Eliminar</button>
                             </div>) : null}
                         </form>
                     </div>
                         {visible ? (<SearchProd list={list} setList={setList} changeVis={changeVisible}/>) : (null)}
                 </div>
-            </div>
-            <div className='container center col s6'>
-                    <VentasInf clientData={clientData} setOff={setOff} off={off} setData={setData} />
-            </div>
-            <div className='row col s6' style={{position: 'relative', marginTop: '-60px'}}>     
-                <div className='col s12 push-s1 container'>
-                    <table className='centered striped'>
+            <div className='row col s6' style={{position: 'fixed', marginTop: '200px', marginLeft: '30px'}}>     
+                <div className='col s12 container'>
+                    <table className='centered'>
                         <thead className='thead-s'>
                             <tr>
                             <th>CODIGO</th>
@@ -141,7 +174,6 @@ const Ventas = () => {
                             <th>CANT.</th>
                             <th>PRECIO</th>
                             <th>EXISTENCIA</th>
-                            <th></th>
                             </tr>
                         </thead>
                         <tbody  className='tbody-s'>
@@ -150,9 +182,15 @@ const Ventas = () => {
                     </table>   
                 </div>
             </div>
-            <div className='col s6 container section center-align right' style={{position: 'relative', marginTop: '20px'}}>
-                <Monto prop={list} montoT={montoT} />
-                {off ? (<button onClick={handlePago} className='center waves-effect waves-light btn center'>Procesar Pago</button>) : null}
+            </div>
+            <div style={{marginLeft: '190px'}}>
+                <div className='container center col s5 push-s1' style={{background: '#e0f2f1'}}>
+                        <VentasInf clientData={clientData} setOff={setOff} off={off} setData={setData} />
+                </div>
+                <div className='col s5 pull-s1 container section center-align right' style={{position: 'relative', marginTop: '60px', background: '#b2dfdb'}}>
+                    <Monto prop={list} montoT={montoT} />
+                    {off ? (<button onClick={handlePago} className='center waves-effect waves-light btn center'>Procesar Pago</button>) : null}
+                </div>
             </div>
         </div>
     )

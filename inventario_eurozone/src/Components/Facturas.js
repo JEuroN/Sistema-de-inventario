@@ -1,6 +1,8 @@
 import React, {useState, useContext, useEffect} from "react"
 import axios from 'axios'
+import { AuthContext } from '../Context/authContext'
 import DetalleFactura from './DetalleFactura'
+import {useHistory} from 'react-router-dom'
 
 const Facturas = () => {
 
@@ -11,6 +13,17 @@ const Facturas = () => {
     const [filter, setFilter] = useState([]);
 
     const [visible, setVisible] = useState(false);
+
+    const {isAuth} = useContext(AuthContext);
+
+    const history = useHistory();
+
+    const check = () =>{
+        if(!isAuth)
+            history.push('/')
+    }
+
+    useEffect(check, [isAuth]);
 
     useEffect(() => {
         getSales();

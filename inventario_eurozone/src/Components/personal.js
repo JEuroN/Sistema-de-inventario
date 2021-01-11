@@ -3,10 +3,9 @@ import axios from "axios"
 import { AuthContext } from '../Context/authContext'
 import PopUp from './modelPers'
 import './../Assets/App.css'
+import { useHistory } from 'react-router-dom'
 
 const Personal = () => {
-
-    const {isAdmin} = useContext(AuthContext);
 
     const [Worker, setWorker] = useState([
     {worker_id: 1, worker_name: 'Obteniendo Datos', worker_login:'xxxx-xx-x', worker_number: 'xx', worker_ced: 'xx', worker_charge: "No-asignado"},
@@ -19,6 +18,18 @@ const Personal = () => {
     const [data, setData] = useState('');
 
     const [choice, setChoice] = useState('');
+
+    const {isAuth, isAdmin} = useContext(AuthContext);
+
+    const history = useHistory();
+
+    const check = () =>{
+        if(!isAuth)
+            history.push('/')
+    }
+
+
+    useEffect(check, [isAuth])
 
     const changeVis = (add) => {
         if(data.length !== 0 || add === 1 || add === 2){
