@@ -30,13 +30,13 @@ const Login = () => {
                 case 0:
                     console.log('gei');
                     toggleAdmin(res.data.name, res.data.id);
-                    history.push('/home');
+                    history.push('/sales');
                 break;
                 case 1:
                     console.log('goi');
                     toggleAuth(res.data.name, res.data.id);
                     console.log(res.data);
-                    history.push('/home');
+                    history.push('/sales');
                 break;
                 default:
                     console.log('boi');
